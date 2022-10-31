@@ -1,0 +1,7 @@
+flowchart TB
+    A[GctSystem] -->|Sup: Resume| B[Server]
+    A -->|Sup: Resume| C[Client]
+    B -->|Watched 0..*| D[ServerDialogue*]
+    D -->|1..1| P[Service]
+    C -->|Watched 0..*| G[ClientDialogue*]
+    G -->|1..1| H[Request]

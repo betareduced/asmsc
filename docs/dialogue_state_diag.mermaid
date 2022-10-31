@@ -1,0 +1,11 @@
+stateDiagram-v2
+    [*] --> CREATED: SPAWN
+    CREATED --> OPENED: OpenDialogue
+    OPENED --> RECEIVED: ServiceIndication
+    RECEIVED --> RECEIVED: ServiceIndication
+    RECEIVED --> DEPLOYED: Execute
+
+    state AllServicesResponded <<choice>>
+    DEPLOYED --> AllServicesResponded: ServiceResponse
+    AllServicesResponded --> DEPLOYED: if has unresponded services
+    AllServicesResponded --> DEATH: if no more services

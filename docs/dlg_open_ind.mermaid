@@ -1,0 +1,27 @@
+sequenceDiagram
+
+    participant G as GctLib
+    participant C as Collector
+    actor Router
+    actor Server
+    actor ServingDialogue
+    actor Sender
+
+    C ->> G: GctLib.receive()
+    Note over C,G: Blocked operation
+    G -->> C: GctMsg
+    Note over G,C: In this case a MAPDT_OPEN_IND msg
+
+    C ->> Router: ProcessMessage
+    Router ->> Server: ProcessIncomingMessage
+
+    Note over Server, ServingDialogue: Dialogue is available if it isn't opened yet
+    alt Dialogue Available
+        Server ->>+ ServingDialogue: SPAWN
+        Server ->> ServingDialogue: OpenDialogue
+        ServingDialogue -->>- Server: DialogueOpenStatus
+    else Dialogue Unavailable
+        Server ->>+ Sender: SPAWN
+        Server ->> Sender: EmitMessage(GenericAbortRequest)
+        Sender --X- Server: DIE
+    end
